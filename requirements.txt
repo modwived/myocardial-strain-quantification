@@ -1,0 +1,27 @@
+# Core
+numpy>=1.23.0
+scipy>=1.9.0
+
+# Deep Learning
+torch>=2.0.0
+torchvision>=0.15.0
+
+# Medical Imaging
+SimpleITK>=2.2.0
+pydicom>=2.3.0
+nibabel>=4.0.0
+
+# Image Processing
+opencv-python-headless>=4.7.0
+scikit-image>=0.20.0
+
+# API / Serving
+fastapi>=0.100.0
+uvicorn[standard]>=0.22.0
+python-multipart>=0.0.6
+
+# Utilities
+pyyaml>=6.0
+tqdm>=4.65.0
+pandas>=2.0.0
+matplotlib>=3.7.0

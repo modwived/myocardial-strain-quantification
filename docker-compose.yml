@@ -1,0 +1,13 @@
+services:
+  app:
+    build: .
+    ports:
+      - "8000:8000"
+    volumes:
+      - ./data:/app/data
+      - ./models:/app/models
+    environment:
+      - MODEL_PATH=/app/models
+      - DATA_DIR=/app/data
+      - LOG_LEVEL=info
+    restart: unless-stopped
