@@ -10,4 +10,16 @@ services:
       - MODEL_PATH=/app/models
       - DATA_DIR=/app/data
       - LOG_LEVEL=info
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - driver: nvidia
+              count: 1
+              capabilities: [gpu]
     restart: unless-stopped
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"

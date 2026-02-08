@@ -19,7 +19,7 @@ env/
 .env
 
 # Data and models (large files)
-data/
+/data/
 models/*.pt
 models/*.pth
 models/*.onnx
