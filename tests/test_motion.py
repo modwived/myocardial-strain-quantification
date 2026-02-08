@@ -74,21 +74,8 @@ class TestMotionEncoder:
 
 
 class TestCarMEN:
-    """Tests for the CarMEN motion estimation network.
+    """Tests for the CarMEN motion estimation network."""
 
-    NOTE: The MotionDecoder uses element-wise addition for skip connections
-    (x = x + skip) where the channel dimensions may not match. This causes a
-    RuntimeError in the forward pass when the decoder has more than one
-    up-sampling stage. Tests that exercise the full forward pass are marked
-    with ``xfail`` to document this known issue. Individual sub-components
-    (encoder, decoder pieces, flow heads) are tested separately above and below.
-    """
-
-    @pytest.mark.xfail(
-        reason="MotionDecoder skip connection size mismatch (x + skip) when decoder has >1 stage",
-        raises=RuntimeError,
-        strict=True,
-    )
     def test_forward_output_shape(self):
         """CarMEN: two (B,1,128,128) inputs -> (B,2,128,128) displacement."""
         model = CarMEN(in_channels=1, features=(16, 32, 64, 128))
@@ -99,11 +86,6 @@ class TestCarMEN:
             output = model(source, target)
         assert output.shape == (2, 2, 128, 128), f"Expected (2,2,128,128), got {output.shape}"
 
-    @pytest.mark.xfail(
-        reason="MotionDecoder skip connection size mismatch",
-        raises=RuntimeError,
-        strict=True,
-    )
     def test_single_sample(self):
         """Should work with batch size 1."""
         model = CarMEN(in_channels=1)
@@ -114,11 +96,6 @@ class TestCarMEN:
             output = model(source, target)
         assert output.shape == (1, 2, 128, 128)
 
-    @pytest.mark.xfail(
-        reason="MotionDecoder skip connection size mismatch",
-        raises=RuntimeError,
-        strict=True,
-    )
     def test_zero_initialized_output(self):
         """Newly initialized CarMEN should produce near-zero displacements."""
         model = CarMEN(in_channels=1)
@@ -130,11 +107,6 @@ class TestCarMEN:
         max_disp = output.abs().max().item()
         assert max_disp < 10.0, f"Zero-init model should produce small displacements, got max {max_disp}"
 
-    @pytest.mark.xfail(
-        reason="MotionDecoder skip connection size mismatch",
-        raises=RuntimeError,
-        strict=True,
-    )
     def test_multi_scale_output(self):
         """With multi_scale=True, should return a list of displacement fields."""
         model = CarMEN(in_channels=1, features=(16, 32, 64, 128), multi_scale=True)
@@ -148,11 +120,6 @@ class TestCarMEN:
         assert output[-1].shape[1] == 2
         assert output[-1].shape[2:] == (128, 128)
 
-    @pytest.mark.xfail(
-        reason="MotionDecoder skip connection size mismatch",
-        raises=RuntimeError,
-        strict=True,
-    )
     def test_seg_attention(self):
         """With use_seg_attention=True, should accept a segmentation mask."""
         model = CarMEN(in_channels=1, use_seg_attention=True)
@@ -164,11 +131,6 @@ class TestCarMEN:
             output = model(source, target, seg_mask=seg_mask)
         assert output.shape == (1, 2, 128, 128)
 
-    @pytest.mark.xfail(
-        reason="MotionDecoder skip connection size mismatch",
-        raises=RuntimeError,
-        strict=True,
-    )
     def test_gradient_flow(self):
         """Gradients should flow from the output back to the source."""
         model = CarMEN(in_channels=1, features=(16, 32, 64, 128))

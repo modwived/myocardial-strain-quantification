@@ -100,9 +100,10 @@ class MotionDecoder(nn.Module):
         self.multi_scale = multi_scale
 
         up_layers: list[nn.Module] = []
+        skip_projs: list[nn.Module] = []
         for i in range(len(features) - 1):
-            # Source + target features are concatenated at each level
-            in_ch = features[i] * 2 if i == 0 else features[i] + features[i]
+            # First stage: concatenated source+target bottleneck; subsequent: output of prior stage
+            in_ch = features[i] * 2 if i == 0 else features[i]
             up_layers.append(
                 nn.Sequential(
                     nn.ConvTranspose2d(in_ch, features[i + 1], 4, stride=2, padding=1),
@@ -110,7 +111,13 @@ class MotionDecoder(nn.Module):
                     nn.LeakyReLU(0.2, inplace=True),
                 )
             )
+            # Project concatenated skip (src + tgt) to match decoder channels
+            skip_ch = features[i + 1] * 2  # src_feat + tgt_feat at this level
+            skip_projs.append(
+                nn.Conv2d(skip_ch, features[i + 1], kernel_size=1, bias=False)
+            )
         self.decoder = nn.ModuleList(up_layers)
+        self.skip_projs = nn.ModuleList(skip_projs)
 
         # Full-resolution flow head (always present)
         self.flow_head = _FlowHead(features[-1])
@@ -158,13 +165,13 @@ class MotionDecoder(nn.Module):
                 if i == 1 and self.flow_head_half is not None:
                     multi_scale_flows.append(self.flow_head_half(x))
 
-            # Skip connection: add concatenated encoder features
+            # Skip connection: project concatenated encoder features and add
             if i + 1 < len(self.decoder):
                 skip_idx = -(i + 2)
                 skip = torch.cat(
                     [source_features[skip_idx], target_features[skip_idx]], dim=1
                 )
-                x = x + skip
+                x = x + self.skip_projs[i](skip)
 
         # Full-resolution flow
         full_flow = self.flow_head(x)
