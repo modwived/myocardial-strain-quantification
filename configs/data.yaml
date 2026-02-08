@@ -1,0 +1,31 @@
+dataset:
+  name: "acdc"
+  root: "./data/ACDC"
+  format: "nifti"  # or "dicom"
+  cache: false      # set true to preload slices into RAM
+
+preprocessing:
+  target_spacing: [1.25, 1.25]
+  crop_size: 128
+  normalize: "zscore"
+
+augmentation:
+  enabled: true
+  rotation_max: 15.0
+  scale_range: [0.9, 1.1]
+  gamma_range: [0.7, 1.5]
+  elastic_alpha: 100.0
+  elastic_sigma: 10.0
+  noise_std: 0.02
+  flip_horizontal: true
+
+dataloader:
+  batch_size: 16
+  num_workers: 4
+  pin_memory: true
+
+split:
+  train: 0.70
+  val: 0.15
+  test: 0.15
+  seed: 42

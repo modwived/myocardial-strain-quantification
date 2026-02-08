@@ -1,0 +1,29 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+dist/
+build/
+.eggs/
+
+# Virtual environment
+venv/
+.venv/
+env/
+
+# IDE
+.vscode/
+.idea/
+
+# Environment
+.env
+
+# Data and models (large files)
+/data/
+models/*.pt
+models/*.pth
+models/*.onnx
+
+# OS
+.DS_Store
+Thumbs.db
