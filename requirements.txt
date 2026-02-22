@@ -1,0 +1,21 @@
+# OpenSage: Self-programming Agent Generation Engine
+# Core dependencies
+
+# Anthropic Claude API (backbone LLM)
+anthropic>=0.83.0
+
+# Graph-based memory system
+networkx>=3.0
+
+# Standard library (for reference - included with Python 3.11+)
+# asyncio - concurrent execution (stdlib)
+# subprocess - tool execution isolation (stdlib)
+# dataclasses - data structures (stdlib)
+# typing - type hints (stdlib)
+
+# Optional: for enhanced execution isolation
+# docker>=7.0  # Docker SDK for container-based execution
+
+# Development & testing
+pytest>=7.0
+pytest-asyncio>=0.23.0
