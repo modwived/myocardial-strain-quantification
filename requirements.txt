@@ -12,10 +12,15 @@ networkx>=3.0
 # subprocess - tool execution isolation (stdlib)
 # dataclasses - data structures (stdlib)
 # typing - type hints (stdlib)
+# json, pathlib, signal, argparse - CLI & config (stdlib)
 
-# Optional: for enhanced execution isolation
-# docker>=7.0  # Docker SDK for container-based execution
+# Optional: for Docker-based isolated execution
+# docker>=7.0
 
 # Development & testing
 pytest>=7.0
 pytest-asyncio>=0.23.0
+
+# Install the opensage CLI:
+#   pip install .        (from project root, using pyproject.toml)
+#   pip install -e .     (editable install for development)

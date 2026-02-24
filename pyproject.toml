@@ -1,0 +1,56 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.backends.legacy:build"
+
+[project]
+name = "opensage"
+version = "1.0.0"
+description = "OpenSage: Self-programming Agent Generation Engine — Enterprise CLI for developers"
+readme = "README.md"
+license = { text = "MIT" }
+requires-python = ">=3.11"
+keywords = [
+    "ai", "agents", "developer-tools", "llm", "code-generation",
+    "bug-fixing", "software-engineering", "anthropic", "claude",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Software Development :: Libraries :: Application Frameworks",
+    "Topic :: Utilities",
+]
+dependencies = [
+    "anthropic>=0.83.0",
+    "networkx>=3.0",
+]
+
+[project.scripts]
+# Installs the `opensage` command globally after `pip install .`
+opensage = "opensage.cli:main"
+
+[project.optional-dependencies]
+# Development and testing
+dev = [
+    "pytest>=7.0",
+    "pytest-asyncio>=0.23.0",
+]
+# Docker-based isolated execution (optional)
+docker = [
+    "docker>=7.0",
+]
+
+[tool.setuptools.packages.find]
+# Automatically find all packages under opensage/
+include = ["opensage*"]
+
+[tool.pytest.ini_options]
+asyncio_mode = "auto"
+testpaths = ["tests"]
+
+[tool.setuptools.package-data]
+"opensage" = ["py.typed"]
